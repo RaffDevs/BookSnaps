@@ -10,4 +10,14 @@
       <ProjectReference Include="..\BookSnaps.Infra\BookSnaps.Infra.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Cortex.Mediator" Version="1.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Owner\Queries\" />
+      <Folder Include="Models\InputModels\" />
+      <Folder Include="Models\ViewModels\" />
+    </ItemGroup>
+
 </Project>

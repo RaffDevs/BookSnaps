@@ -11,6 +11,6 @@ public class Book
     public int PageCount { get; init; }
     public string CoverUrl { get; init; } = string.Empty;
     public string Isbn { get; init; } = string.Empty;
-    public Guid OwnerId { get; init; }
+    public string OwnerId { get; init; }
     public Owner Owner { get; init; }
 }

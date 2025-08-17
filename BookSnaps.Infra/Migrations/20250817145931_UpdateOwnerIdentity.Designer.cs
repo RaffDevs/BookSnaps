@@ -3,6 +3,7 @@ using System;
 using BookSnaps.Infra.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookSnaps.Infra.Migrations
 {
     [DbContext(typeof(BookSnapsDbContext))]
-    partial class BookSnapsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250817145931_UpdateOwnerIdentity")]
+    partial class UpdateOwnerIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.19");
