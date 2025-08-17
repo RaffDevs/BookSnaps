@@ -14,11 +14,11 @@ builder.Services.AddDbContext<BookSnapsDbContext>(options =>
     }
     else if (builder.Environment.IsProduction())
     {
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+        options.UseNpgsql(builder.Configuration["Database:ConnectionString"]);
     }
     
 });
-
+builder.Configuration.GetConnectionString(builder.Configuration["Database:ConnectionString"]);
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
