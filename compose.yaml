@@ -1,0 +1,23 @@
+﻿services:
+  booksnaps.webapp:
+    image: booksnaps.webapp
+    build:
+      context: .
+      dockerfile: BookSnaps.Webapp/Dockerfile
+    depends_on:
+      - booksnaps.db
+
+  booksnaps.db:
+    image: postgres:16
+    container_name: booksnaps.db
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
