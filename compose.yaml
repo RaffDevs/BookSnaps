@@ -9,7 +9,7 @@ services:
     depends_on:
       - booksnaps.db
     ports:
-      - "6001:8080" 
+      - "6004:8080" 
 
   booksnaps.db:
     image: postgres:16
