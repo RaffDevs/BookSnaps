@@ -1,5 +1,7 @@
 using BookSnaps.Application.Features.Account.Models;
+using BookSnaps.Webapp.Models.Enums;
 using Cortex.Mediator;
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,27 +12,119 @@ public class AccountController : Controller
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IMediator _mediator;
-    
-    public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IMediator mediator)
+
+    public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager,
+        IMediator mediator)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _mediator = mediator;
     }
-    
-    [HttpGet] 
-    public IActionResult Register() 
+
+    [HttpGet]
+    public IActionResult Login()
     {
         return View();
     }
 
+
     [HttpPost]
-    public Task<IActionResult> Register(RegisterInputModel model)
+    public async Task<IActionResult> Login(LoginInputModel model)
     {
         if (!ModelState.IsValid)
         {
-            
+            TempData["ToastMessage"] = "Oops... some fields are invalid!";
+            TempData["ToastType"] = ToastType.Error.Humanize();
+            TempData["ToastLabel"] = "Error";
+
+            return View(model);
         }
         
-    } 
-}
+        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
+        if (!result.Succeeded)
+        {
+            TempData["ToastMessage"] = "Invalid credentials";
+            TempData["ToastType"] = ToastType.Error.Humanize();
+            TempData["ToastLabel"] = "Error";
+
+            return View(model);
+        }
+        
+        TempData["ToastLabel"] = "Success";
+        TempData["ToastMessage"] = "Welcome to Booksnaps!";
+        TempData["ToastType"] = ToastType.Success.Humanize();
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterInputModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["ToastMessage"] = "Oops... some fields are invalid!";
+                TempData["ToastType"] = ToastType.Error.Humanize();
+                TempData["ToastLabel"] = "Error";
+                return View(model);
+            }
+
+            if (model.Password != model.ConfirmPassword)
+            {
+                ModelState.AddModelError(string.Empty, "Passwords do not match!");
+                ;
+                return View(model);
+            }
+
+            var user = new IdentityUser
+            {
+                Email = model.Email,
+                UserName = $"{model.FirstName} {model.SurName}"
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    if (error is { Code: "DuplicateUserName" or "DuplicateEmail" })
+                    {
+                        ModelState.AddModelError("Email", "Email already registered!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+
+                TempData["ToastMessage"] = $"Oops... Register failed!";
+                TempData["ToastType"] = ToastType.Error.Humanize();
+                TempData["ToastLabel"] = "Error";
+
+                return View(model);
+            }
+
+            await _signInManager.SignInAsync(user, false);
+            TempData["ToastLabel"] = "Success";
+            TempData["ToastMessage"] = "Welcome to Booksnaps";
+            TempData["ToastType"] = ToastType.Success.Humanize();
+
+            return RedirectToAction("Index", "Home");
+        }
+        
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            TempData["ToastLabel"] = "Success";
+            TempData["ToastMessage"] = "See you soon!";
+            TempData["ToastType"] = ToastType.Success.Humanize();
+
+            return RedirectToAction("Login", "Account");
+        }
+    }

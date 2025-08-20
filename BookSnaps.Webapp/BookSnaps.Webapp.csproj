@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Humanizer" Version="2.14.1" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.19" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.19" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.19">
@@ -74,5 +75,15 @@
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Views\Partials\" />
+      <Folder Include="wwwroot\images\" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Watch Include="Views\**\*.cshtml"/>
+    </ItemGroup>
+
 
 </Project>

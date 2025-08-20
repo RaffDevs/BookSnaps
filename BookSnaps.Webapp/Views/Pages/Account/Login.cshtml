@@ -1,0 +1,36 @@
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "_AccountLayout";
+}
+
+
+<div class="w-1/3">
+    <div class="flex flex-row justify-center items-center">
+        <div class="avatar">
+            <div class="w-16 rounded">
+                <img src="~/images/logo.png" alt="logo"/>
+            </div>
+        </div> 
+        <div class="mx-2"></div> 
+        <h1 class="text-3xl font-bold ">BookSnaps</h1>
+    </div>
+    
+    <div class="">
+        <p class="text-center">Entre na sua conta para acessar seus destaques</p>
+    </div>
+    
+    <form asp-action="Login" asp-controller="Account" method="post">
+        <div class="">
+            <div class="card w-96 bg-base-100 card-xl shadow-sm mx-auto">
+                <div class="card-body items-center">
+                    <h2 class="card-title ">Xlarge Card</h2>
+                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                    <div class="justify-end card-actions">
+                        <button class="btn btn-primary">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

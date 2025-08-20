@@ -1,4 +1,8 @@
+using BookSnaps.Application.Features.Owner.Commands.Create;
+using BookSnaps.Domain.Repositories;
 using BookSnaps.Infra.Persistence.Context;
+using BookSnaps.Infra.Persistence.Repositories;
+using Cortex.Mediator.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,15 +38,33 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddEntityFrameworkStores<BookSnapsDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<OwnerRepository>();
+
+builder.Services.AddCortexMediator(
+    configuration: builder.Configuration,
+    handlerAssemblyMarkerTypes: [typeof(CreateOwnerCommandHandler)],
+    configure: options => { options.AddDefaultBehaviors(); }
+);
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
 });
 
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-});
+builder.Services
+    .AddControllersWithViews(options =>
+    {
+        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+    })
+    .AddRazorOptions(options =>
+    {
+        options.ViewLocationFormats.Clear();
+        
+        options.ViewLocationFormats.Add("/Views/Pages/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Partials/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Components/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Layouts/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+    });
 
 var app = builder.Build();
 
