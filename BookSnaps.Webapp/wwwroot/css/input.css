@@ -1,6 +1,25 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-    themes: light --default, caramellatte 
+@plugin "daisyui"; 
+@plugin "daisyui/theme" {  
+    name: "caramellatte";
+    default: "true";
+    --color-primary: #6E5A4C;
+    --color-primary-content: #FFFFFF;
+
+    --color-secondary: #A68A79;
+    --color-secondary-content: #FFFFFF;
+    --color-accent: #D4A373;
+    --color-accent-content: #FFFFFF;
+    --color-base-content: var(--color-primary);
+    --color-base-100: #FBF9F6; /* fundo geral */
+    --color-base-200: #FFFFFF; /* cards */
+    --color-base-300: #E8E2DD; /* bordas suaves */
+
+    --color-neutral: #3D2B1F;
+    --color-neutral-content: #FFFFFF;
+
+    --color-info: #6B5E55; /* links, placeholders */
+    --color-warning: #FFF6ED;
 }
 
 

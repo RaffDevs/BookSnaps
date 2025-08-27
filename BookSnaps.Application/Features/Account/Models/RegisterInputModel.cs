@@ -4,16 +4,24 @@ namespace BookSnaps.Application.Features.Account.Models;
 
 public class RegisterInputModel
 {
-    [Required(ErrorMessage = "First name is required!")]
+    [Required(ErrorMessage = "Nome precisa ser preenchido!")]
+    [Display(Name = "Nome")]
     public string FirstName { get; set; } = string.Empty;
-    [Required(ErrorMessage = "Surname is required!")]
+    
+    [Required(ErrorMessage = "Sobrenome precisa ser preenchido!")]
+    [Display(Name = "Sobrenome")]
     public string SurName { get; set; } = string.Empty;
-    [Required(ErrorMessage = "Email is required!")]
-    [EmailAddress(ErrorMessage = "Invalid email address!")]
+    
+    [Required(ErrorMessage = "Email precisa ser preenchido!")]
+    [EmailAddress(ErrorMessage = "Email inválido!")]
     public string Email { get; set; } = string.Empty;
-    [Required(ErrorMessage = "Password is required!")]
+    
+    [Required(ErrorMessage = "Senha precisa ser preenchida!")]
+    [Display(Name = "Senha")]
     public string Password { get; set; } = string.Empty;
-    [Required(ErrorMessage = "Confirm password is required!")]
-    [Compare("Password", ErrorMessage = "Passwords do not match!")]
+    
+    [Required(ErrorMessage = "Confirme sua senha!")]
+    [Display(Name = "Confirma senha")]
+    [Compare("Password", ErrorMessage = "Senhas não conferem!")]
     public string ConfirmPassword { get; set; } = string.Empty;
 }

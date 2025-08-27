@@ -77,7 +77,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Views\Partials\" />
       <Folder Include="wwwroot\images\" />
     </ItemGroup>
     

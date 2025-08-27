@@ -15,11 +15,11 @@ public class BookSnapsError
 
     public override string ToString()
     {
-        return $"{Origin.Name}: {Message}";
+        return $"{Message}";
     }
 
     public void ShowException()
     {
-        Console.WriteLine(Exception.Message);
+        Console.WriteLine($"{Origin.Name} - {Exception.Message}");
     }
 }

@@ -1,0 +1,155 @@
+@model RegisterInputModel
+
+@{
+    ViewBag.Title = "Registro";
+    Layout = "_AccountLayout";
+}
+
+<div class="w-full lg:w-2/5 min-h-screen ">
+    <div class="flex flex-row justify-center items-center mt-4">
+        <div class="avatar">
+            <div class="w-16 rounded">
+                <img src="~/images/logo.png" alt="logo"/>
+            </div>
+        </div>
+        <div class="mx-2"></div>
+        <h1 class="text-3xl font-bold text-neutral">BookSnaps</h1>
+    </div>
+
+    <div class="lg:mt-4">
+        <p class="text-center text-info text-base">Crie sua conta e organize seus destaques</p>
+    </div>
+
+    <form id="register-form" class="mt-2 lg:mt-16" asp-action="Register" asp-controller="Account" method="post">
+        @Html.AntiForgeryToken()
+        <div class="card w-80 lg:w-2/3 bg-base-100 card-xl shadow-2xl mx-auto">
+            <div class="card-body items-center">
+                <h2 class="card-title text-neutral text-3xl">Criar Conta</h2>
+                <p class="text-info text-base">Preencha os dados abaixo para criar sua conta</p>
+                <div class="my-2"></div>
+                <ul id="stepper" class="steps steps-horizontal lg:w-96 " data-current-step="0">
+                    <li class="step step-primary" data-step="0">Nome</li>
+                    <li class="step" data-step="1">Email</li>
+                    <li class="step" data-step="2">Senha</li>
+                </ul>
+                <div class="step-content  w-full">
+                    <div class="" data-step-content="0">
+                        <fieldset class="fieldset w-full ">
+                            <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.FirstName)</legend>
+                            <input type="text" asp-for="FirstName" class="input w-full input-lg" placeholder="Nome"/>
+                            <span class="text-error" asp-validation-for="FirstName"></span>
+                        </fieldset>
+                        <fieldset class="fieldset w-full ">
+                            <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.SurName)</legend>
+                            <input type="text" asp-for="SurName" class="input w-full input-lg" placeholder="Sobrenome"/>
+                            <span class="text-error" asp-validation-for="SurName"></span>
+                        </fieldset>
+                    </div>
+                    <div class="hidden" data-step-content="1">
+                        <fieldset class="fieldset w-full ">
+                            <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Email)</legend>
+                            <input type="text" asp-for="Email" class="input w-full input-lg" placeholder="exemplo@mail.com"/>
+                            <span class="text-error" asp-validation-for="Email"></span>
+                        </fieldset>
+                    </div>
+                    <div class="hidden" data-step-content="2">
+                        <fieldset class="fieldset w-full ">
+                            <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Password)</legend>
+                            <input type="password" asp-for="Password" class="input w-full input-lg"/>
+                            <span class="text-error" asp-validation-for="Password"></span>
+                        </fieldset>
+                        <fieldset class="fieldset w-full ">
+                            <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.ConfirmPassword)</legend>
+                            <input type="password" asp-for="ConfirmPassword" class="input w-full input-lg"/>
+                            <span class="text-error" asp-validation-for="ConfirmPassword"></span>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="my-2"></div>
+                <div class="justify-end card-actions w-full">
+                    <button id="back-step" type="button" class="btn btn-primary hidden">Voltar</button>
+                    <button id="next-step" type="button" class="btn btn-primary">Próximo</button>
+                </div>
+                <div class="my-2"></div>
+                <div>
+                    <p class="text-sm text-info">
+                        Já tem uma conta?
+                        <a class="link link-hover text-neutral font-bold" asp-action="Login">Fazer login</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $(function () {
+            const $form = $("#register-form"); 
+            const $stepper = $("#stepper");
+            const $steps = $("[data-step]");
+            const $back = $("#back-step");
+            const $next = $("#next-step");
+            const totalSteps = $steps.length;
+            
+            $form.removeData("validator").removeData("unobtrusiveValidation");
+            $.validator.unobtrusive.parse($form);
+
+            const getStep = () => Number($stepper.data("current-step") ?? 0);
+            const setStep = (s) => $stepper.data("current-step", s);
+
+            function paint() {
+                const currentStep = getStep();
+                $steps.each(function (i, el) {
+                    $(el).toggleClass("step-primary", i <= currentStep);
+                });
+                
+                $("[data-step-content]").addClass("hidden")
+                    .filter(`[data-step-content="${currentStep}"]`).removeClass("hidden");
+                
+                $back.toggleClass("hidden", currentStep === 0);
+                $next
+                    .text(currentStep === (totalSteps - 1) ? "Enviar" : "Próximo")
+                    .attr("type", currentStep === (totalSteps - 1) ? "submit" : "button");
+            }
+            
+           function validateCurrentStep() {
+                const $visibleFormPanel = $(`[data-step-content="${getStep()}"]`);
+                const form = $form.validate();
+                let isValid = true;
+                let $first = null;
+               
+                $visibleFormPanel.find(":input[data-val='true']:enabled").each(function () {
+                    if (!form.element(this)) {
+                        isValid = false;
+                        if (!$first) {
+                            $first = $(this);
+                        }
+                    }
+                });
+
+               if (!isValid && $first) $first.trigger('focus');
+
+               return isValid;
+           }
+           
+           function moveStepper(target) {
+                const currentStep = getStep();
+                target = Math.max(0, Math.min(target, totalSteps - 1));
+                if (target > currentStep && !validateCurrentStep()) {
+                    return;
+                }
+                setStep(target);
+                paint();
+           }
+
+            $next.on("click", () => moveStepper(getStep() + 1));
+            $back.on("click", () => moveStepper(getStep() - 1));
+            
+            paint();    
+        });
+    </script>
+}
