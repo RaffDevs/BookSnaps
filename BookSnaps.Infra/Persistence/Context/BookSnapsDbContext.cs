@@ -14,6 +14,8 @@ public class BookSnapsDbContext : IdentityDbContext<IdentityUser>
    
    public DbSet<Owner> Owners { get; set; }
    public DbSet<Book> Books { get; set; }
+   
+   public DbSet<Highlight> Highlights { get; set; }
 
    protected override void OnModelCreating(ModelBuilder builder)
    {

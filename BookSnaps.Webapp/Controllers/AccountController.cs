@@ -2,6 +2,7 @@ using System.Security.Claims;
 using BookSnaps.Application.Features.Account.Models;
 using BookSnaps.Application.Features.Owner.Commands.Create;
 using BookSnaps.Application.Models;
+using BookSnaps.Webapp.Extensions;
 using BookSnaps.Webapp.Models.Enums;
 using Cortex.Mediator;
 using Humanizer;
@@ -36,10 +37,7 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["ToastMessage"] = "Oops... some fields are invalid!";
-            TempData["ToastType"] = ToastType.Error.Humanize();
-            TempData["ToastLabel"] = "Error";
-
+            this.AddToastMessage("Oops... alguns campos estão inválidos!", ToastType.Error, "Error");
             return View(model);
         }
 
@@ -47,17 +45,12 @@ public class AccountController : Controller
 
         if (!result.Succeeded)
         {
-            TempData["ToastMessage"] = "Invalid credentials";
-            TempData["ToastType"] = ToastType.Error.Humanize();
-            TempData["ToastLabel"] = "Error";
-
+            this.AddToastMessage("Credenciais inválidas", ToastType.Error, "Error");
             return View(model);
         }
 
-        TempData["ToastLabel"] = "Success";
-        TempData["ToastMessage"] = "Welcome to Booksnaps!";
-        TempData["ToastType"] = ToastType.Success.Humanize();
-        return RedirectToAction("Index", "Home");
+        this.AddToastMessage("Bem vindo ao Booksnaps!", ToastType.Success, "Success");
+        return RedirectToAction("Index", "Library");
     }
 
     [HttpGet]
@@ -71,16 +64,13 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["ToastMessage"] = "Oops... some fields are invalid!";
-            TempData["ToastType"] = ToastType.Error.Humanize();
-            TempData["ToastLabel"] = "Error";
+            this.AddToastMessage("Oops... alguns campos estão inválidos", ToastType.Error, "Error");
             return View(model);
         }
 
         if (model.Password != model.ConfirmPassword)
         {
             ModelState.AddModelError(string.Empty, "Passwords do not match!");
-            ;
             return View(model);
         }
 
@@ -106,16 +96,13 @@ public class AccountController : Controller
                 }
             }
 
-            TempData["ToastMessage"] = $"Oops... Register failed!";
-            TempData["ToastType"] = ToastType.Error.Humanize();
-            TempData["ToastLabel"] = "Error";
-
+            this.AddToastMessage("Oops... Falha ao registrar!", ToastType.Error, "Error");;
             return View(model);
         }
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, $"{model.FirstName} {model.SurName}")
+            new(ClaimTypes.GivenName, $"{model.FirstName} {model.SurName}")
         };
 
         var claimsResult = await _userManager.AddClaimsAsync(user, claims);
@@ -123,9 +110,8 @@ public class AccountController : Controller
         if (!claimsResult.Succeeded)
         {
             await _userManager.DeleteAsync(user);
-            TempData["ToastMessage"] = $"Oops... Register failed!";
-            TempData["ToastType"] = ToastType.Error.Humanize();
-            TempData["ToastLabel"] = "Error";
+            this.AddToastMessage("Oops... Falha ao registrar!", ToastType.Error, "Error");
+            return View(model);
         }
         
         var command = new CreateOwnerCommand
@@ -140,27 +126,19 @@ public class AccountController : Controller
         if (!owner.IsSuccess)
         {
             await _userManager.DeleteAsync(user);
-            TempData["ToastMessage"] = $"Erro ao criar usuário!";
-            TempData["ToastType"] = ToastType.Error.Humanize();
-            TempData["ToastLabel"] = "Error";
+            this.AddToastMessage("Oops... Erro ao criar usuario!", ToastType.Error, "Error");
             return View(model);
         }
 
         await _signInManager.SignInAsync(user, false);
-        TempData["ToastLabel"] = "Success";
-        TempData["ToastMessage"] = "Welcome to Booksnaps";
-        TempData["ToastType"] = ToastType.Success.Humanize();
-
-        return RedirectToAction("Index", "Home");
+        this.AddToastMessage("Bem vindo ao Booksnaps!", ToastType.Success, "Success");;
+        return RedirectToAction("Index", "Library");
     }
 
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
-        TempData["ToastLabel"] = "Success";
-        TempData["ToastMessage"] = "See you soon!";
-        TempData["ToastType"] = ToastType.Success.Humanize();
-
+        this.AddToastMessage("Até breve!", ToastType.Success, "Success");
         return RedirectToAction("Login", "Account");
     }
 }

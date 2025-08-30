@@ -39,6 +39,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<OwnerRepository>();
+builder.Services.AddScoped<BookRepository>();
 
 builder.Services.AddCortexMediator(
     configuration: builder.Configuration,
@@ -48,6 +49,8 @@ builder.Services.AddCortexMediator(
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
+    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    options.SlidingExpiration = true;
 });
 
 builder.Services
@@ -61,9 +64,9 @@ builder.Services
         
         options.ViewLocationFormats.Add("/Views/Pages/{1}/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Partials/{0}.cshtml");
-        options.ViewLocationFormats.Add("/Views/Components/{1}/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Layouts/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+        
     });
 
 var app = builder.Build();
@@ -86,7 +89,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Library}/{action=Index}/{id?}");
 
 if (Convert.ToBoolean(builder.Configuration["Database:Migrate"]))
 {

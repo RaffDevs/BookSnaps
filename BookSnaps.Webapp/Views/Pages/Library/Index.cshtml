@@ -1,0 +1,28 @@
+@model int
+@{
+    ViewBag.Title = "Biblioteca";
+    Layout = "_Layout";
+}
+
+<div class="mt-8 flex flex-row justify-between items-center flex-wrap ">
+    <div class="ms-4 w-full sm:w-auto">
+        <h1 class="text-3xl font-bold text-">Minha Biblioteca</h1>
+        <p class="text-secondary text-base">@Model livros cadastrados</p>
+    </div>
+    <button class="btn btn-primary mt-4 ml-auto me-4 sm:ml-0 sm:mt-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-white" width="24" height="24" viewBox="0 0 24 24"  stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Novo Livro
+    </button> 
+</div>
+
+<div class="mt-8 px-4">
+    <label class="input w-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input class="input-lg bg-white" type="search" required placeholder="Search"/>
+    </label>
+</div>
+
+<div id="library" class="px-4">
+    <div class="mb-8"></div>
+    @await Component.InvokeAsync("BookList", new { search = "" })
+</div>

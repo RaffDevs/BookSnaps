@@ -1,47 +1,59 @@
-﻿<!DOCTYPE html>
-<html lang="en" data-theme="caramellatte">
+﻿@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="caramellatte">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - BookSnaps.Webapp</title>
     <link rel="stylesheet" href="~/css/output.css"/>
 </head>
-<body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookSnaps.Webapp</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
+<body class="flex flex-col min-h-screen">
+<div class="navbar bg-secondary-content shadow-sm">
+    <div class="flex-1 flex flex-row ">
+        <div class="avatar rounded-xl">
+            <div class="w-16 rounded">
+                <img src="~/images/logo.png" alt="logo"/>
             </div>
         </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
-
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2025 - BookSnaps.Webapp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="flex flex-col justify-center space-y-0 ml-2">
+            <h1 class="text-lg font-bold">BookSnaps</h1> 
+            <p class="text-info text-xs">Capture seus destaques</p>
+        </div>
     </div>
-</footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+    <div class="flex-none">
+        <ul class="menu menu-horizontal px-1">
+            <li class="hidden lg:block">
+                <button class="btn btn-primary">
+                    <svg class="fill-white" height="20" width="20" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>library-line</title> <path d="M33.48,29.63,26.74,11.82a2,2,0,0,0-2.58-1.16L21,11.85V8.92A1.92,1.92,0,0,0,19.08,7H14V4.92A1.92,1.92,0,0,0,12.08,3H5A2,2,0,0,0,3,5V32a1,1,0,0,0,1,1H20a1,1,0,0,0,1-1V19.27l5,13.21a1,1,0,0,0,1.29.58l5.61-2.14a1,1,0,0,0,.58-1.29ZM12,8.83V31H5V5h7ZM19,31H14V9h5Zm8.51-.25L21.13,13.92l3.74-1.42,6.39,16.83Z" class="clr-i-outline clr-i-outline-path-1"></path> <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect> </g></svg>
+                    <p class="">Biblioteca</p>
+                </button>
+            </li>
+            <li class="mx-2"></li>
+            <li class="mr-2">
+                <details>
+                    <summary>@User.FindFirstValue(ClaimTypes.GivenName).Split(" ")[0]</summary>
+                    <ul class="bg-base-100 rounded-t-none p-2">
+                        <li class="block lg:hidden"><a>Biblioteca</a></li>
+                        <li><a>Link 1</a></li>
+                        <li class="menu-title">Title</li>
+                        <li>
+                            <form asp-action="Logout" asp-controller="Account" method="post">
+                                @Html.AntiForgeryToken() 
+                                <button class="btn btn-link text-error btn-xs">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+    </div>
+</div>
+<main role="main" class="flex-1 flex flex-col">
+    @RenderBody()
+    @await Html.PartialAsync("_Toast")
+</main>
+
+@await Html.PartialAsync("_BodyImports")
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

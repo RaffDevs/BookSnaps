@@ -1,4 +1,4 @@
-<div id="asp-toast" class="toast toast-top toast-end flex flex-row justify-between">
+<div id="asp-toast" class="toast toast-top toast-end">
     @if (TempData["ToastMessage"] != null)
     {
         var toastType = TempData["ToastType"]?.ToString() ?? ToastType.Info.Humanize();
