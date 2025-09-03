@@ -1,0 +1,50 @@
+@model LoginInputModel 
+
+@{
+    ViewBag.Title = "Novo livro";
+    Layout = "_Layout";
+}
+
+
+<div class="w-full flex flex-row px-1 sm:px-0 justify-center ">
+    <form class="mt-4 lg:mt-16 w-full sm:w-1/2 " asp-action="Login" asp-controller="Account" method="post">
+        @Html.AntiForgeryToken()
+        <div class="card bg-base-100 card-xl mx-auto">
+            <div class="card-body items-center">
+                <h2 class="card-title text-neutral text-3xl">Entrar</h2>
+                <div role="tablist" class="tabs tabs-box">
+                    <a role="tab" class="tab tab-active">Manual</a>
+                    <a role="tab" class="tab">Por ISBN</a>
+                </div>
+                <p class="text-info text-base">Digite seu email e senha para acessar a conta</p>
+                <div class="my-2"></div>
+                <fieldset class="fieldset w-full ">
+                    <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Email)</legend>
+                    <input type="text" asp-for="Email" class="input w-full input-lg" placeholder="exemple@mail.com"/>
+                    <span class="text-error" asp-validation-for="Email"></span>
+                </fieldset>
+                <fieldset class="fieldset w-full ">
+                    <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Password)</legend>
+                    <input type="password" asp-for="Password" class="input w-full input-lg"/>
+                    <span class="text-error" asp-validation-for="Password"></span>
+                </fieldset>
+
+                <div class="justify-end card-actions w-full">
+                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                </div>
+                <div class="my-2"></div>
+                <div>
+                    <p class="text-sm text-info">
+                        Não tem conta?
+                        <a class="link link-hover text-neutral font-bold" asp-action="Register">Criar conta</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+   @await Html.PartialAsync("_ValidationScriptsPartial") 
+}

@@ -9,7 +9,7 @@
         <h1 class="text-3xl font-bold text-">Minha Biblioteca</h1>
         <p class="text-secondary text-base">@Model livros cadastrados</p>
     </div>
-    <button class="btn btn-primary mt-4 ml-auto me-4 sm:ml-0 sm:mt-0">
+    <button id="add-book" class="btn btn-primary mt-4 ml-auto me-4 sm:ml-0 sm:mt-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-white" width="24" height="24" viewBox="0 0 24 24"  stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         Novo Livro
     </button> 
@@ -41,42 +41,45 @@
 
 @section Scripts {
     <script>
-       $(document).ready(function () {
-            let $scrollBtn = $("#scroll-btn"); 
+        $(document).ready(function () {
+            let $scrollBtn = $("#scroll-btn");
             let $search = $("#search-books");
             let timeout = null;
-            
-           $(window).scroll(function () {
-              if ($search.offset().top + $search.outerHeight() < $(window).scrollTop()) {
-                  $scrollBtn.fadeIn();
-              } 
-              else {
-                  $scrollBtn.fadeOut();
-              }
-           }) 
-           
-           $scrollBtn.click(function () {
-               $("html, body").animate({scrollTop: 0 }, 500);
-           });
-            
-            $search.on("input", function () {
-               clearTimeout(timeout);
-               $("#book-grid").hide();
-               $("#notfound").addClass("hidden");
-               $("#loading").removeClass("hidden");
-               
-               const search = $(this).val();
-               
-               timeout = setTimeout(function () {
-                   searchBooks(search);
-               }, 1500);
+
+            $("#add-book").click(function () {
+               window.location.href = "/Library/AddBook"; 
             });
             
+            $(window).scroll(function () {
+                if ($search.offset().top + $search.outerHeight() < $(window).scrollTop()) {
+                    $scrollBtn.fadeIn();
+                } else {
+                    $scrollBtn.fadeOut();
+                }
+            })
+
+            $scrollBtn.click(function () {
+                $("html, body").animate({scrollTop: 0}, 500);
+            });
+
+            $search.on("input", function () {
+                clearTimeout(timeout);
+                $("#book-grid").hide();
+                $("#notfound").addClass("hidden");
+                $("#loading").removeClass("hidden");
+
+                const search = $(this).val();
+
+                timeout = setTimeout(function () {
+                    searchBooks(search);
+                }, 1500);
+            });
+
             function searchBooks(search) {
                 $.ajax({
                     url: "Library/Grid/",
                     type: "GET",
-                    data: { search: search },
+                    data: {search: search},
                     success: function (data) {
                         $("#result").html(data);
                     },
@@ -88,6 +91,7 @@
                     }
                 })
             }
+           
        }) 
     </script>
 }
