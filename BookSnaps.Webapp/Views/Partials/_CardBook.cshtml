@@ -1,0 +1,72 @@
+@model BookViewModel
+@{
+    var book = Model;
+}
+
+<div class="flex flex-row p-2 space-x-2 rounded-lg shadow-md border border-base-300 cursor-pointer transition delay-50 duration-200 ease-in-out hover:scale-105">
+    <div class="flex-1 flex flex-col">
+        <div class="avatar indicator bg-primary w-full h-4/5 rounded-xl">
+            @if (book.HighlightCount > 0)
+            {
+                <span class="indicator-item badge badge-secondary">@Model.HighlightCount</span>
+            }
+            <div class="w-12 rounded-xl my-auto mx-auto">
+                <svg class="stroke-white fill-transparent" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <g id="Interface / Book">
+                            <path id="Vector"
+                                  d="M5 19.5002V6.2002C5 5.08009 5 4.51962 5.21799 4.0918C5.40973 3.71547 5.71547 3.40973 6.0918 3.21799C6.51962 3 7.08009 3 8.2002 3H17.4002C17.9602 3 18.2407 3 18.4546 3.10899C18.6427 3.20487 18.7948 3.35774 18.8906 3.5459C18.9996 3.75981 19 4.04005 19 4.6001V16.4001C19 16.9601 18.9996 17.2398 18.8906 17.4537C18.7948 17.6419 18.6429 17.7952 18.4548 17.8911C18.2411 18 17.961 18 17.402 18H7.25C6.00736 18 5 19.0074 5 20.25C5 20.6642 5.33579 21 5.75 21H16.402C16.961 21 17.2411 21 17.4548 20.8911C17.6429 20.7952 17.7948 20.642 17.8906 20.4538C17.9996 20.2399 18 19.9601 18 19.4V18"
+                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class=" flex-3 pl-2">
+        <h1 class="text-xl font-bold line-clamp-1">@book.Title</h1>
+        <div class="my-1"></div>
+        <p class="text-sm text-secondary">@book.Author.Split(",")[0]</p>
+        <div class="my-2"></div>
+        <p class="text-sm text-secondary line-clamp-2">@book.Description</p>
+        <div class="my-2"></div>
+        <div class="flex flex-row justify-between">
+            <p class="text-xs text-secondary">@book.Publisher</p>
+            @if (book.HighlightCount > 0)
+            {
+                <span class="flex flex-row items-center justify-center">
+                    <svg class="w-4 stroke-secondary fill-transparent" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g
+                            id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g clip-path="url(#clip0_15_137)">
+                                <path
+                                    d="M3 8C3 7.44772 3.44772 7 4 7H8.5L9.5 4H14.5L15.5 7H20C20.5523 7 21 7.44772 21 8V19C21 19.5523 20.5523 20 20 20H4C3.44772 20 3 19.5523 3 19V8Z"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                                <circle cx="12" cy="13"
+                                        r="3"
+                                        stroke-linejoin="round"></circle> </g>
+                            <defs>
+                                <clipPath
+                                    id="clip0_15_137">
+                                    <rect width="24" height="24"
+                                          fill="white"></rect> </clipPath> </defs> </g></svg>
+                    <p class="text-xs text-secondary">
+                        @if (book.HighlightCount > 1)
+                        {
+                            @: Destaques
+                        }
+                        else
+                        {
+                            @: Destaque
+                        }
+                    </p>
+                </span>
+            }
+        </div>
+    </div>
+</div>

@@ -33,4 +33,11 @@ public class LibraryController : Controller
         
         return View(result.Data);
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> Grid(string search)
+    {
+        Console.WriteLine($"Busca {search}");
+        return ViewComponent("BookList", new {search});
+    }
 }

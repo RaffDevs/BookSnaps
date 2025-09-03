@@ -11,12 +11,12 @@ namespace BookSnaps.Application.Features.Books.Queries.GetAll;
 public class GetAllBooksQueryHandler : IQueryHandler<GetAllBooksQuery, Result<List<BookViewModel>>>
 {
     private readonly BookRepository _bookRepository;
-    
+
     public GetAllBooksQueryHandler(BookRepository bookRepository)
     {
         _bookRepository = bookRepository;
     }
-    
+
     public async Task<Result<List<BookViewModel>>> Handle(GetAllBooksQuery query, CancellationToken cancellationToken)
     {
         try
@@ -28,17 +28,17 @@ public class GetAllBooksQueryHandler : IQueryHandler<GetAllBooksQuery, Result<Li
             if (!string.IsNullOrWhiteSpace(query.Search))
             {
                 var s = query.Search.ToLower().Trim();
-                q = q.Where(
-                    b => 
-                        b.Title.Contains(s.ToLower()) || 
-                        b.Authors.Contains(s, StringComparison.CurrentCultureIgnoreCase));
+                q = q.Where(b =>
+                    EF.Functions.Like(b.Title, $"%{s.ToLower()}%") ||
+                    EF.Functions.Like(b.Authors, $"%{s.ToLower()}%"));
             }
-            
+
             var books = await q
                 .OrderBy(b => b.Title)
                 .Select(b => b.ToBookViewModel())
                 .ToListAsync(cancellationToken);
-            
+
+            Console.WriteLine($"CONSULTA {q.ToQueryString()}");
             return Result<List<BookViewModel>>.Success(books);
         }
         catch (Exception ex)
