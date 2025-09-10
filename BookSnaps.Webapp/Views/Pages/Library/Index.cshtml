@@ -9,7 +9,7 @@
         <h1 class="text-3xl font-bold text-">Minha Biblioteca</h1>
         <p class="text-secondary text-base">@Model livros cadastrados</p>
     </div>
-    <button id="add-book" class="btn btn-primary mt-4 ml-auto me-4 sm:ml-0 sm:mt-0">
+    <button onclick="window.location.href='@Url.Action("AddBook", "Library")'" class="btn btn-primary mt-4 ml-auto me-4 sm:ml-0 sm:mt-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-white" width="24" height="24" viewBox="0 0 24 24"  stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         Novo Livro
     </button> 
@@ -46,9 +46,6 @@
             let $search = $("#search-books");
             let timeout = null;
 
-            $("#add-book").click(function () {
-               window.location.href = "/Library/AddBook"; 
-            });
             
             $(window).scroll(function () {
                 if ($search.offset().top + $search.outerHeight() < $(window).scrollTop()) {

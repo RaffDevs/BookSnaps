@@ -1,4 +1,4 @@
-@model LoginInputModel 
+@model CreateBookInputModel
 
 @{
     ViewBag.Title = "Novo livro";
@@ -7,44 +7,119 @@
 
 
 <div class="w-full flex flex-row px-1 sm:px-0 justify-center ">
-    <form class="mt-4 lg:mt-16 w-full sm:w-1/2 " asp-action="Login" asp-controller="Account" method="post">
+    <form id="add-book-form" class="mt-4 lg:mt-16 w-full sm:w-1/2 " asp-action="Login" asp-controller="Account" method="post">
         @Html.AntiForgeryToken()
-        <div class="card bg-base-100 card-xl mx-auto">
+        <div class="shadow-lg rounded-lg bg-base-100 mx-auto">
             <div class="card-body items-center">
-                <h2 class="card-title text-neutral text-3xl">Entrar</h2>
-                <div role="tablist" class="tabs tabs-box">
-                    <a role="tab" class="tab tab-active">Manual</a>
-                    <a role="tab" class="tab">Por ISBN</a>
-                </div>
-                <p class="text-info text-base">Digite seu email e senha para acessar a conta</p>
+                <h2 class="card-title text-primary text-xl self-start">Novo Livro</h2>
                 <div class="my-2"></div>
-                <fieldset class="fieldset w-full ">
-                    <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Email)</legend>
-                    <input type="text" asp-for="Email" class="input w-full input-lg" placeholder="exemple@mail.com"/>
-                    <span class="text-error" asp-validation-for="Email"></span>
-                </fieldset>
-                <fieldset class="fieldset w-full ">
-                    <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Password)</legend>
-                    <input type="password" asp-for="Password" class="input w-full input-lg"/>
-                    <span class="text-error" asp-validation-for="Password"></span>
-                </fieldset>
+                <div id="tabber" role="tablist" class="tabs tabs-box" data-current-tab="0">
+                    <a role="tab" class="tab tab-active" data-tab="0">Manual</a>
+                    <a role="tab" class="tab" data-tab="1">Por ISBN</a>
+                </div>
+                <div class="my-2"></div>
+                <p class="text-info text-base text-center">Cadastre um novo livro <b>manualmente </b> ou buscando pelo
+                    <b>isbn</b>
+                </p>
+                <div class="my-2"></div>
 
+                <div id="add-book-container" class="w-full grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-x-4">
+                    <fieldset class="fieldset w-full order-1 sm:col-span-2 hidden">
+                        <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Isbn)</legend>
+                        <div class="join">
+                            <input id="input-isbn" type="search" class="input w-full input-lg join-item" placeholder="Ex: 9781234543212"/>
+                            <button id="search-isbn" type="button" class="btn join-item btn-lg">Buscar</button>
+                        </div>
+                    </fieldset>
+                    <fieldset class="fieldset w-full order-2">
+                        <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Title)</legend>
+                        <input type="text" asp-for="Title" class="input w-full input-lg"
+                               placeholder="Ex: Crônicas de Nárnia"/>
+                        <span class="text-error" asp-validation-for="Title"></span>
+                    </fieldset>
+
+                    <fieldset class="fieldset w-full order-3 sm:order-6 sm:col-span-2">
+                        <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Author)</legend>
+                        <input type="text" asp-for="Author" class="input w-full input-lg" placeholder="Ex: C.S Lewis"/>
+                        <p class="label">Separar com virgula em caso de multiplos autores</p>
+                        <span class="text-error" asp-validation-for="Author"></span>
+                    </fieldset>
+
+                    <fieldset class="fieldset w-full order-4">
+                        <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Publisher)</legend>
+                        <input type="text" asp-for="Publisher" class="input w-full input-lg"
+                               placeholder="Ex: Thomas Nelson"/>
+                        <span class="text-error" asp-validation-for="Publisher"></span>
+                    </fieldset>
+
+                    <fieldset class="fieldset w-full order-5">
+                        <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.PageCount)</legend>
+                        <input type="number" asp-for="PageCount" class="input w-full input-lg" placeholder="Ex: 300"/>
+                        <span class="text-error" asp-validation-for="PageCount"></span>
+                    </fieldset>
+
+                    <fieldset class="fieldset w-full order-6 sm:order-3">
+                        <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Isbn)</legend>
+                        <input type="text" asp-for="Isbn" class="input w-full input-lg"
+                               placeholder="Ex: 9781234567890"/>
+                        <span class="text-error" asp-validation-for="Isbn"></span>
+                    </fieldset>
+
+                    <fieldset class="fieldset w-full sm:col-span-2 order-7">
+                        <legend class="fieldset-legend">@Html.DisplayNameFor(m => m.Description)</legend>
+                        <textarea asp-for="Description" placeholder="Narra a aventura de..."
+                                  class="textarea textarea-lg w-full"></textarea>
+                        <span class="text-error" asp-validation-for="Description"></span>
+                    </fieldset>
+                </div>
+                <div class="my-4"></div>
                 <div class="justify-end card-actions w-full">
-                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    <button type="submit" class="btn btn-primary btn-block">Adicionar</button>
                 </div>
-                <div class="my-2"></div>
-                <div>
-                    <p class="text-sm text-info">
-                        Não tem conta?
-                        <a class="link link-hover text-neutral font-bold" asp-action="Register">Criar conta</a>
-                    </p>
 
-                </div>
+                <div class="my-2"></div>
             </div>
         </div>
     </form>
 </div>
 
 @section Scripts {
-   @await Html.PartialAsync("_ValidationScriptsPartial") 
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $(document).ready(function () {
+           const $form = $('#add-book-form');
+           const $tabber = $('#tabber');
+           const $tabs = $("[data-tab]");
+           
+           
+           const getTab = () => Number($tabber.data('current-tab') ?? 0);
+           const setTab = (tab) => $tabber.data('current-tab', tab);
+           
+           function paint() {
+               const currentTab = getTab();
+               $tabs.each(function (i, el) {
+                  $(el).toggleClass('tab-active', i === currentTab);
+               });
+           }
+            function changeTabContent(tab) {
+               const fieldsets = $('#add-book-container fieldset').slice(1);
+               const inputs = fieldsets.find("input, textarea")
+                   
+               inputs.each(function (i, el) {
+                   $(el).prop('disabled', tab !== 0);
+               });
+               
+               $(".order-1").toggleClass('hidden', tab === 0);
+               
+            }
+           
+           $tabs.on('click', function (el) {
+               const tab = $(el.target).data('tab');
+               setTab(tab);
+               changeTabContent(tab);
+               paint();
+           })
+        })
+    </script>
 }
