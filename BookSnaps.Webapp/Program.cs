@@ -2,10 +2,12 @@ using BookSnaps.Application.Features.Owner.Commands.Create;
 using BookSnaps.Domain.Repositories;
 using BookSnaps.Infra.Persistence.Context;
 using BookSnaps.Infra.Persistence.Repositories;
+using BookSnaps.Infra.Services;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +69,12 @@ builder.Services
         options.ViewLocationFormats.Add("/Views/Layouts/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
         
+    });
+
+builder.Services.AddRefitClient<IBrasilApiService>()
+    .ConfigureHttpClient(c =>
+    {
+        c.BaseAddress = new Uri(builder.Configuration["BookProviders:BrasilApi"]);
     });
 
 var app = builder.Build();

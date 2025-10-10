@@ -18,10 +18,11 @@
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.19" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
+      <PackageReference Include="Refit" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\" />
+      <Folder Include="Services\Constants\" />
     </ItemGroup>
 
 </Project>

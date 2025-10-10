@@ -7,8 +7,30 @@
         const toast = $("#asp-toast");
         toast
             .show()
-            .animate({top: "100px"}, 400)
-            .delay(4000)
+            .animate({bottom: "50px"}, 400)
+            .delay(2000)
+            .fadeOut(400);
+    }
+
+    function showAjaxToast(message, type = "success") {
+        const toast = $("#ajax-toast");
+        const toastBody = toast.find("div");
+        const toastMessage = toastBody.find("span");
+
+        const toastClasses = {
+            "success": "alert alert-success",
+            "error": "alert alert-error",
+            "warning": "alert alert-warning",
+            "default": "alert alert-info"
+        };
+        toastBody.addClass(toastClasses[type]);
+
+        toastMessage.text(message);
+        console.log(message);
+        toast
+            .show()
+            .animate({bottom: "50px"}, 400)
+            .delay(2000)
             .fadeOut(400);
     }
     

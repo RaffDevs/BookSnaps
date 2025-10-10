@@ -3,9 +3,9 @@
     var book = Model;
 }
 
-<div class="flex flex-row p-2 space-x-2 rounded-lg shadow-md border border-base-300 cursor-pointer transition delay-50 duration-200 ease-in-out hover:scale-105">
+<div onclick="window.location='@Url.Action("Details", "Library", new { id = @book.Id })'" class="flex flex-row p-2 space-x-2 rounded-lg shadow-md border border-base-300 cursor-pointer transition delay-50 duration-200 ease-in-out hover:scale-105">
     <div class="flex-1 flex flex-col">
-        <div class="avatar indicator bg-primary w-full h-4/5 rounded-xl">
+        <div class="avatar indicator bg-primary w-full h-12/12 rounded-xl">
             @if (book.HighlightCount > 0)
             {
                 <span class="indicator-item badge badge-secondary">@Model.HighlightCount</span>
