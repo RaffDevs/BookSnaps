@@ -9,11 +9,14 @@ services:
     depends_on:
       - booksnaps.db
     environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
       - Database__ConnectionString=${ConnectionString}
       - Database__Migrate=${Migrate}
       - BookProviders__BrasilApi=${BrasilApi}
     expose:
       - "8080"
+    labels:
+      - "traefik.http.services.booksnaps_webapp.loadbalancer.server.port=8080"
   booksnaps.db:
     image: postgres:16
     container_name: booksnaps.db
