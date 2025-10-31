@@ -34,8 +34,7 @@
                     <summary>@User.FindFirstValue(ClaimTypes.GivenName).Split(" ")[0]</summary>
                     <ul class="bg-base-100 rounded-t-none p-2">
                         <li class="block lg:hidden"><a asp-action="Index" asp-controller="Library">Biblioteca</a></li>
-                        <li><a>Link 1</a></li>
-                        <li class="menu-title">Title</li>
+                        <li class="block lg:hidden"><a asp-action="Index" asp-controller="Library">Perfil</a></li>
                         <li>
                             <form asp-action="Logout" asp-controller="Account" method="post">
                                 @Html.AntiForgeryToken() 
