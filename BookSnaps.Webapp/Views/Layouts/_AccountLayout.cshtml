@@ -4,7 +4,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - BookSnaps.Webapp</title>
-    <link rel="stylesheet" href="~/css/output.css"/>
+    @await Html.PartialAsync("_HeadImports")
+
 </head>
 <body class="flex flex-col min-h-screen">
 <main role="main" class="flex-1 flex flex-col items-center">
@@ -14,5 +15,50 @@
 
 @await Html.PartialAsync("_BodyImports")
 @await RenderSectionAsync("Scripts", required: false)
+        
+<script>
+    document.addEventListener("alpine:init", () => {
+        Alpine.store("toast", {
+            message: "",
+            toastClass: "",
+            type: "success",
+            isVisible: false,
+
+            show(message, type = "success") {
+                console.log("Showing toast:", message, type);
+                this.message = message;
+                this.type = type;
+                this.isVisible = true;
+                this.setClass();
+
+                setTimeout(() => {
+                    this.isVisible = false;
+                    console.log("Hiding toast");
+                }, 3000);
+            },
+
+            setClass() {
+                const toastClasses = {
+                    "success": "alert alert-success",
+                    "error": "alert alert-error",
+                    "warning": "alert alert-warning",
+                    "default": "alert alert-info"
+                };
+                this.toastClass = toastClasses[this.type] || toastClasses["default"];
+            },
+        });
+
+        Alpine.store("register", {
+            currentStep: 0,
+            totalSteps: 3,
+            
+        });
+    });
+    
+    document.addEventListener("show-toast", (event) => {
+        Alpine.store("toast").show(event.detail.message, event.detail.type);
+    });
+
+</script>
 </body>
 </html>
